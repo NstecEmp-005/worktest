@@ -24,6 +24,7 @@ public class UserDeleteConfirmServlet extends BaseServlet {
      * @throws ServletException サーブレット例外
      * @throws IOException 入出力例外
      */
+    private static UserService userService = new UserService();
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             // ログインチェック
@@ -40,7 +41,7 @@ public class UserDeleteConfirmServlet extends BaseServlet {
                 return;
             }
             // ユーザー情報を取得
-            UserService userService = new UserService();
+            //UserService userService = new UserService();
             User user = userService.getUserById(userIdToDelete); // 権限チェックも兼ねる
             if (user == null) {
                 session.setAttribute("errorMessage", "指定されたユーザーが見つかりません。(ID: " + userIdToDelete + ")");
@@ -78,7 +79,7 @@ public class UserDeleteConfirmServlet extends BaseServlet {
                 return;
             }
             // ユーザー情報を取得
-            UserService userService = new UserService();
+            //UserService userService = new UserService();
             // 削除前にユーザー情報を取得して、完了メッセージで使用できるようにする
             User userBeforeDelete = userService.getUserById(userIdToDelete);
             String userNameForMessage = (userBeforeDelete != null) ? userBeforeDelete.getUserName() : userIdToDelete;
