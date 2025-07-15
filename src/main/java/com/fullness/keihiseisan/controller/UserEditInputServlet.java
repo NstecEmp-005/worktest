@@ -49,7 +49,8 @@ public class UserEditInputServlet extends BaseServlet {
             // バリデーションエラーで戻ってきた場合
             if (sessionInputUser != null) {
                 userToEdit = sessionInputUser;
-                session.removeAttribute("userToEditInput"); // 一度使ったら消す
+                session.removeAttribute("userToEditInput"); 
+                // 一度使ったら消す
                 List<String> sessionErrors = (List<String>) session.getAttribute("errors");
                 if (sessionErrors != null) {
                     errors.addAll(sessionErrors);
@@ -128,6 +129,7 @@ public class UserEditInputServlet extends BaseServlet {
             RoleService roleService = new RoleService();
             userToEdit.setRoleName(roleService.getRoleById(roleId).getRoleName());
             // バリデーション
+            // ユーザー情報が正しいかチェック
             UserService userService = new UserService();
             List<String> errors = userService.validateUser(userToEdit);
             // 確認用パスワードと入力パスワードが一致しない場合はエラー
