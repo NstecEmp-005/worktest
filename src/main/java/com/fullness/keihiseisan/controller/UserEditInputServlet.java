@@ -71,7 +71,7 @@ public class UserEditInputServlet extends BaseServlet {
                 if (userToEdit == null) {
                     throw new BusinessException("指定されたユーザーが見つかりません。");
                 }
-               
+            
             }
             // パスワードは表示しない
             if (userToEdit != null) {
