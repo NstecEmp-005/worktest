@@ -23,23 +23,23 @@ import com.fullness.keihiseisan.model.value.User;
 public class ApplyConfirmServlet extends BaseServlet {
     /**
      * GETリクエストを処理する
-     * @param req リクエスト
-     * @param resp レスポンス
+     * @param request リクエスト
+     * @param response レスポンス
      * @throws ServletException サーブレット例外
      * @throws IOException 入出力例外
      */
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        HttpSession session = req.getSession(false);
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(false);
         if (session == null || session.getAttribute("loginUser") == null) {
-            resp.sendRedirect(req.getContextPath() + "/login");
+            response.sendRedirect(request.getContextPath() + "/login");
             return;
         }
 
         ExpenseApplication expense = (ExpenseApplication) session.getAttribute("expenseInput");
         if (expense == null) {
             session.setAttribute("illegalOperationMsg", "申請情報が見つかりません。");
-            resp.sendRedirect(req.getContextPath() + "/menu");
+            response.sendRedirect(request.getContextPath() + "/menu");
             return;
         }
 
@@ -53,36 +53,36 @@ public class ApplyConfirmServlet extends BaseServlet {
                  }
              }
         } catch (Exception e) {
-            handleSystemError(req, resp, e);
+            handleSystemError(request, response, e);
             return;
         }
 
-        req.setAttribute("expense", expense);
-        req.getRequestDispatcher("/WEB-INF/jsp/expense/apply/confirm.jsp").forward(req, resp);
+        request.setAttribute("expense", expense);
+        request.getRequestDispatcher("/WEB-INF/jsp/expense/apply/confirm.jsp").forward(request, response);
     }
 
     /**
      * POSTリクエストを処理する
-     * @param request リクエスト
-     * @param response レスポンス
+     * @param requestuest リクエスト
+     * @param responseonse レスポンス
      * @throws ServletException サーブレット例外
      * @throws IOException 入出力例外
      */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest requestuest, HttpServletResponse responseonse) throws ServletException, IOException {
         // セッションからログインユーザー情報を取得
-        HttpSession session = request.getSession();
+        HttpSession session = requestuest.getSession();
         User loginUser = (User) session.getAttribute("loginUser");
         // ログインユーザー情報がない場合はログイン画面へリダイレクト
         if (loginUser == null) {
-            response.sendRedirect(request.getContextPath() + "/login");
+            responseonse.sendRedirect(requestuest.getContextPath() + "/login");
             return;
         }
         try {
             // CSRFトークンの検証
             String sessionToken = (String) session.getAttribute("csrfToken");
-            String requestToken = request.getParameter("csrfToken");
-            if (sessionToken == null || !sessionToken.equals(requestToken)) {
+            String requestuestToken = requestuest.getParameter("csrfToken");
+            if (sessionToken == null || !sessionToken.equals(requestuestToken)) {
                 throw new BusinessException("不正なリクエストです。");
             }
             // セッションから申請情報を取得
@@ -96,12 +96,12 @@ public class ApplyConfirmServlet extends BaseServlet {
             int newId = service.applyExpense(expense, loginUser);
             // 申請完了画面へリダイレクト
             System.out.println("申請完了 ID: " + newId);
-            response.sendRedirect(request.getContextPath() + "/expense/apply/complete?id=" + newId);
+            responseonse.sendRedirect(requestuest.getContextPath() + "/expense/apply/complete?id=" + newId);
         } catch (BusinessException e) {
-            handleError(request, response, e);
+            handleError(requestuest, responseonse, e);
             return;
         } catch (Exception e) {
-            handleSystemError(request, response, e);
+            handleSystemError(requestuest, responseonse, e);
             return;
         }
     }

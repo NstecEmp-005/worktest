@@ -51,6 +51,7 @@ public class UserEditCompleteServlet extends BaseServlet {
             request.getRequestDispatcher("/WEB-INF/jsp/user/edit/complete.jsp").forward(request, response);
         } catch (Exception e) {
             // TODO: handle exception
+            handleSystemError(request, response, e);
         }
     }
 } 
